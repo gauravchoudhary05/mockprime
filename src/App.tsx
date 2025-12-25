@@ -1,5 +1,3 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -13,23 +11,22 @@ import LegalPage from "./pages/LegalPage";
 import NotFound from "./pages/NotFound";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/mock-tests" element={<MockTests />} />
-        <Route path="/practice" element={<Practice />} />
-        <Route path="/test" element={<Test />} />
-        <Route path="/result" element={<Result />} />
-        <Route path="/upgrade" element={<Upgrade />} />
-        <Route path="/solutions" element={<Solutions />} />
-        <Route path="/legal" element={<LegalPage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-  );
+  // Simple routing without react-router-dom
+  const path = window.location.pathname;
+  
+  let PageComponent = Index;
+  if (path === "/auth") PageComponent = Auth;
+  else if (path === "/dashboard") PageComponent = Dashboard;
+  else if (path === "/mock-tests") PageComponent = MockTests;
+  else if (path === "/practice") PageComponent = Practice;
+  else if (path === "/test") PageComponent = Test;
+  else if (path === "/result") PageComponent = Result;
+  else if (path === "/upgrade") PageComponent = Upgrade;
+  else if (path === "/solutions") PageComponent = Solutions;
+  else if (path === "/legal") PageComponent = LegalPage;
+  else if (path !== "/") PageComponent = NotFound;
+
+  return <PageComponent />;
 }
 
 export default App;
