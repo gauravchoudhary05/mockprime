@@ -2,7 +2,8 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**URL**: https://lovable.dev/projects/85bcd9ad-bca2-4ef6-b569-ba8f285ff9cb
+
 
 ## How can I edit this code?
 
@@ -10,7 +11,8 @@ There are several ways of editing your application.
 
 **Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Simply visit the [Lovable Project](https://lovable.dev/projects/85bcd9ad-bca2-4ef6-b569-ba8f285ff9cb
+ID) and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
@@ -24,10 +26,10 @@ Follow these steps:
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone <https://github.com/gauravchoudhary05/mockprime.git>
 
 # Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+cd <mockprime>
 
 # Step 3: Install the necessary dependencies.
 npm i
@@ -62,7 +64,8 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Simply open [Lovable](https://lovable.dev/projects/REPLACE_W85bcd9ad-bca2-4ef6-b569-ba8f285ff9cb
+T_ID) and click on Share -> Publish.
 
 ## Can I connect a custom domain to my Lovable project?
 

@@ -1,11 +1,11 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { useProfile } from '@/hooks/useProfile';
-import { Navbar } from '@/components/layout/Navbar';
-import { TestCard } from '@/components/TestCard';
-import { Badge } from '@/components/ui/badge';
+import { useAuth } from '../hooks/useAuth';
+import { useProfile } from '../hooks/useProfile';
+import { Navbar } from '../components/layout/Navbar';
+import { TestCard } from '../components/TestCard';
+import { Badge } from '../components/ui/badge';
 import { Crown, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '../components/ui/button';
 import { Link } from 'react-router-dom';
 
 export default function MockTests() {

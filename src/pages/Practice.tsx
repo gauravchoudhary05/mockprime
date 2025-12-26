@@ -1,10 +1,10 @@
 import { Navigate, Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { useProfile } from '@/hooks/useProfile';
-import { Navbar } from '@/components/layout/Navbar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useAuth } from '../hooks/useAuth';
+import { useProfile } from '../hooks/useProfile';
+import { Navbar } from '../components/layout/Navbar';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
 import { Brain, Calculator, Globe, Monitor, Play, ArrowLeft, Lock, Crown, Loader2 } from 'lucide-react';
 
 export default function Practice() {

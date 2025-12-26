@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { useProfile } from '@/hooks/useProfile';
-import { Navbar } from '@/components/layout/Navbar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
-import { GrowthChart } from '@/components/GrowthChart';
-import { GlobalLeaderboard } from '@/components/GlobalLeaderboard';
+import { useAuth } from '../hooks/useAuth';
+import { useProfile } from '../hooks/useProfile';
+import { Navbar } from '../components/layout/Navbar';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Progress } from '../components/ui/progress';
+import { Badge } from '../components/ui/badge';
+import { supabase } from '../integrations/supabase/client';
+import { GrowthChart } from '../components/GrowthChart';
+import { GlobalLeaderboard } from '../components/GlobalLeaderboard';
 import { 
   BookOpen, 
   Trophy, 
@@ -134,7 +134,7 @@ export default function Dashboard() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold mb-1">
-                Welcome, {user.user_metadata?.full_name || user.email?.split('@')[0]}! 👋
+                Welcome, {user.user_metadata?.full_name || user.email?.split('..')[0]}! 👋
               </h1>
               <p className="text-muted-foreground text-sm md:text-base">Track your progress and continue your exam preparation.</p>
             </div>

@@ -1,10 +1,10 @@
 import { useLocation, Navigate, Link } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { Navbar } from '@/components/layout/Navbar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { TestLeaderboard } from '@/components/TestLeaderboard';
+import { useAuth } from '../hooks/useAuth';
+import { Navbar } from '../components/layout/Navbar';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Progress } from '../components/ui/progress';
+import { TestLeaderboard } from '../components/TestLeaderboard';
 import { 
   Trophy, 
   CheckCircle, 

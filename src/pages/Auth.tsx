@@ -1,13 +1,13 @@
-import { useSearchParams, Link, Navigate } from 'react-router-dom';
-import { LoginForm } from '@/components/auth/LoginForm';
-import { SignupForm } from '@/components/auth/SignupForm';
-import { useAuth } from '@/hooks/useAuth';
-import { Navbar } from '@/components/layout/Navbar';
-import { Shield, BookOpen, Trophy, Clock } from 'lucide-react';
+import { useSearchParams, Link, Navigate } from "react-router-dom";
+import { LoginForm } from "../components/auth/LoginForm";
+import { SignupForm } from "../components/auth/SignupForm";
+import { useAuth } from "../hooks/useAuth";
+import { Navbar } from "../components/layout/Navbar";
+import { Shield, BookOpen, Trophy, Clock } from "lucide-react";
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
-  const mode = searchParams.get('mode') || 'login';
+  const mode = searchParams.get("mode") || "login";
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -29,19 +29,25 @@ export default function Auth() {
         {/* Left Side - Form */}
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="w-full max-w-md">
-            {mode === 'login' ? <LoginForm /> : <SignupForm />}
+            {mode === "login" ? <LoginForm /> : <SignupForm />}
             <p className="text-center mt-6 text-muted-foreground">
-              {mode === 'login' ? (
+              {mode === "login" ? (
                 <>
-                  Don't have an account?{' '}
-                  <Link to="/auth?mode=signup" className="text-primary hover:underline font-medium">
+                  Don't have an account?{" "}
+                  <Link
+                    to="/auth?mode=signup"
+                    className="text-primary hover:underline font-medium"
+                  >
                     Sign up
                   </Link>
                 </>
               ) : (
                 <>
-                  Already have an account?{' '}
-                  <Link to="/auth?mode=login" className="text-primary hover:underline font-medium">
+                  Already have an account?{" "}
+                  <Link
+                    to="/auth?mode=login"
+                    className="text-primary hover:underline font-medium"
+                  >
                     Sign in
                   </Link>
                 </>
@@ -63,7 +69,8 @@ export default function Auth() {
               Ace Your Delhi Police Exam
             </h2>
             <p className="text-primary-foreground/80 mb-8 text-lg">
-              Comprehensive mock tests and practice questions designed specifically for Delhi Police recruitment exams.
+              Comprehensive mock tests and practice questions designed
+              specifically for Delhi Police recruitment exams.
             </p>
             <div className="space-y-4">
               <div className="flex items-center gap-4">
@@ -72,7 +79,9 @@ export default function Auth() {
                 </div>
                 <div>
                   <h3 className="font-semibold">1000+ Questions</h3>
-                  <p className="text-sm text-primary-foreground/70">Curated question bank covering all topics</p>
+                  <p className="text-sm text-primary-foreground/70">
+                    Curated question bank covering all topics
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -81,7 +90,9 @@ export default function Auth() {
                 </div>
                 <div>
                   <h3 className="font-semibold">Real Exam Simulation</h3>
-                  <p className="text-sm text-primary-foreground/70">Experience actual exam conditions</p>
+                  <p className="text-sm text-primary-foreground/70">
+                    Experience actual exam conditions
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -90,7 +101,9 @@ export default function Auth() {
                 </div>
                 <div>
                   <h3 className="font-semibold">Track Your Progress</h3>
-                  <p className="text-sm text-primary-foreground/70">Detailed analytics and performance insights</p>
+                  <p className="text-sm text-primary-foreground/70">
+                    Detailed analytics and performance insights
+                  </p>
                 </div>
               </div>
             </div>

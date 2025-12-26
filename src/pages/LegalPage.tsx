@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Navbar } from '@/components/layout/Navbar';
-import { supabase } from '@/integrations/supabase/client';
+import { Navbar } from '../components/layout/Navbar';
+import { supabase } from '../integrations/supabase/client';
 import { Loader2, ArrowLeft } from 'lucide-react';
 
 interface LegalDoc {
