@@ -10,12 +10,12 @@ import { Badge } from '../components/ui/badge';
 import { supabase } from '../integrations/supabase/client';
 import { GrowthChart } from '../components/GrowthChart';
 import { GlobalLeaderboard } from '../components/GlobalLeaderboard';
-import { 
-  BookOpen, 
-  Trophy, 
-  Clock, 
-  TrendingUp, 
-  Target, 
+import {
+  BookOpen,
+  Trophy,
+  Clock,
+  TrendingUp,
+  Target,
   Brain,
   ChevronRight,
   Play,
@@ -42,6 +42,13 @@ interface Stats {
   averageScore: number;
   bestScore: number;
   totalQuestions: number;
+}
+
+interface MockTest {
+  name: string;
+  table: string;
+  isFree?: boolean;
+  isPro?: boolean;
 }
 
 export default function Dashboard() {
@@ -72,13 +79,13 @@ export default function Dashboard() {
         setAttempts(data);
         
         const totalTests = data.length;
-        const averageScore = totalTests > 0 
-          ? data.reduce((acc, curr) => acc + curr.percentage, 0) / totalTests 
+        const averageScore = totalTests > 0
+          ? data.reduce((acc, curr) => acc + curr.percentage, 0) / totalTests
           : 0;
-        const bestScore = totalTests > 0 
-          ? Math.max(...data.map(d => d.percentage)) 
+        const bestScore = totalTests > 0
+          ? Math.max(...data.map(d => d.percentage))
           : 0;
-        const totalQuestions = data.reduce((acc, curr) => 
+        const totalQuestions = data.reduce((acc, curr) =>
           acc + curr.correct_answers + curr.wrong_answers + curr.unattempted, 0);
 
         setStats({ totalTests, averageScore, bestScore, totalQuestions });
@@ -102,13 +109,13 @@ export default function Dashboard() {
     return <Navigate to="/auth?mode=login" replace />;
   }
 
-  // All mock tests for quick start section
-  const allMockTests = [
-    { name: 'Mock Test 1 (FREE)', table: 'Mock test 1', isFree: true },
-    { name: 'Mock Test 2', table: 'Mock test 2', isPro: true },
-    { name: 'Mock Test 3', table: 'Mock test 3', isPro: true },
-    { name: 'Mock Test 4', table: 'Mock test 4', isPro: true },
-    { name: 'Mock Test 5', table: 'Mock test 5', isPro: true },
+  // ✅ FIXED: Real table names - No more 42P01 "Mock test 1" errors
+  const allMockTests: MockTest[] = [
+    { name: 'Delhi Police Mock 1 (FREE)', table: 'Delhi Police Mock 1', isFree: true },
+    { name: 'Delhi Police Mock 2', table: 'Delhi Police Mock 2', isPro: true },
+    { name: 'Delhi Police Mock 3', table: 'Delhi Police Mock 3', isPro: true },
+    { name: 'Delhi Police Mock 4', table: 'Delhi Police Mock 4', isPro: true },
+    { name: 'Delhi Police Mock 5', table: 'Delhi Police Mock 5', isPro: true },
     { name: 'Reasoning 1', table: 'Reasoning 1', isPro: true },
     { name: 'Reasoning 2', table: 'Reasoning 2', isPro: true },
     { name: 'Reasoning 3', table: 'Reasoning 3', isPro: true },
@@ -118,12 +125,51 @@ export default function Dashboard() {
     { name: 'General Awareness 1', table: 'General Awareness 1', isPro: true },
   ];
 
-  const subjects = [
-    { name: 'Reasoning', icon: Brain, color: 'bg-purple-500', tests: 7 },
-    { name: 'Mathematics', icon: Target, color: 'bg-blue-500', tests: 6 },
-    { name: 'General Awareness', icon: BookOpen, color: 'bg-green-500', tests: 5 },
-    { name: 'Computer', icon: TrendingUp, color: 'bg-orange-500', tests: 5 },
+  const delhiPoliceTests: MockTest[] = [
+    { name: 'Mock 1 (FREE)', table: 'Delhi Police Mock 1', isFree: true },
+    { name: 'Mock 2', table: 'Delhi Police Mock 2', isPro: true },
+    { name: 'Mock 3', table: 'Delhi Police Mock 3', isPro: true },
+    { name: 'Mock 4', table: 'Delhi Police Mock 4', isPro: true },
+    { name: 'Mock 5', table: 'Delhi Police Mock 5', isPro: true },
+    { name: 'Mock 6', table: 'Delhi Police Mock 6', isPro: true },
+    { name: 'Mock 7', table: 'Delhi Police Mock 7', isPro: true },
+    { name: 'Mock 8', table: 'Delhi Police Mock 8', isPro: true },
+    { name: 'Mock 9', table: 'Delhi Police Mock 9', isPro: true },
+    { name: 'Mock 10', table: 'Delhi Police Mock 10', isPro: true },
   ];
+
+  const subjects = [
+    { name: 'Reasoning', icon: Brain, color: 'bg-purple-500', tests: 7, tablePrefix: 'Reasoning' },
+    { name: 'Mathematics', icon: Target, color: 'bg-blue-500', tests: 6, tablePrefix: 'Maths' },
+    { name: 'General Awareness', icon: BookOpen, color: 'bg-green-500', tests: 5, tablePrefix: 'General Awareness' },
+    { name: 'Computer', icon: TrendingUp, color: 'bg-orange-500', tests: 5, tablePrefix: 'Computer' },
+  ];
+
+  const TestCard = ({ test }: { test: MockTest }) => {
+    const isLocked = test.isPro && !isPremium;
+    return (
+      <Link
+        key={test.table}
+        to={isLocked ? '/upgrade' : `/test/${test.table}`}
+        className={`p-3 rounded-lg border transition-all text-sm ${
+          isLocked
+            ? 'bg-muted/50 border-border hover:bg-muted'
+            : test.isFree
+            ? 'bg-success/10 border-success/20 hover:bg-success/20'
+            : 'bg-card border-border hover:border-primary/50 hover:bg-primary/5'
+        }`}
+      >
+        <div className="flex items-center justify-between">
+          <span className="font-medium truncate">{test.name}</span>
+          {isLocked ? (
+            <Lock className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+          ) : (
+            <Play className="w-3 h-3 text-primary flex-shrink-0" />
+          )}
+        </div>
+      </Link>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -134,7 +180,7 @@ export default function Dashboard() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold mb-1">
-                Welcome, {user.user_metadata?.full_name || user.email?.split('..')[0]}! 👋
+                Welcome, {user.user_metadata?.full_name || user.email?.split('@')[0]}! 👋
               </h1>
               <p className="text-muted-foreground text-sm md:text-base">Track your progress and continue your exam preparation.</p>
             </div>
@@ -227,31 +273,9 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {allMockTests.map((test, index) => {
-                    const isLocked = test.isPro && !isPremium;
-                    return (
-                      <Link
-                        key={test.table}
-                        to={isLocked ? '/upgrade' : `/test/${test.table}`}
-                        className={`p-3 rounded-lg border transition-all text-sm ${
-                          isLocked 
-                            ? 'bg-muted/50 border-border hover:bg-muted' 
-                            : test.isFree 
-                              ? 'bg-success/10 border-success/20 hover:bg-success/20' 
-                              : 'bg-card border-border hover:border-primary/50 hover:bg-primary/5'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium truncate">{test.name}</span>
-                          {isLocked ? (
-                            <Lock className="w-3 h-3 text-muted-foreground flex-shrink-0" />
-                          ) : (
-                            <Play className="w-3 h-3 text-primary flex-shrink-0" />
-                          )}
-                        </div>
-                      </Link>
-                    );
-                  })}
+                  {allMockTests.map((test) => (
+                    <TestCard key={test.table} test={test} />
+                  ))}
                 </div>
                 <div className="mt-4 flex gap-2">
                   <Link to="/mock-tests" className="flex-1">
@@ -271,46 +295,13 @@ export default function Dashboard() {
                   <Target className="w-5 h-5 text-blue-500" />
                   Delhi Police Mock Tests
                 </CardTitle>
-                <CardDescription>Practice with Delhi Police exam pattern</CardDescription>
+                <CardDescription>Practice with Delhi Police exam pattern (100+ questions each)</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {[
-                    { name: 'Mock 1 (FREE)', table: 'Delhi Police Mock 1', isFree: true },
-                    { name: 'Mock 2', table: 'Delhi Police Mock 2', isPro: true },
-                    { name: 'Mock 3', table: 'Delhi Police Mock 3', isPro: true },
-                    { name: 'Mock 4', table: 'Delhi Police Mock 4', isPro: true },
-                    { name: 'Mock 5', table: 'Delhi Police Mock 5', isPro: true },
-                    { name: 'Mock 6', table: 'Delhi Police Mock 6', isPro: true },
-                    { name: 'Mock 7', table: 'Delhi Police Mock 7', isPro: true },
-                    { name: 'Mock 8', table: 'Delhi Police Mock 8', isPro: true },
-                    { name: 'Mock 9', table: 'Delhi Police Mock 9', isPro: true },
-                    { name: 'Mock 10', table: 'Delhi Police Mock 10', isPro: true },
-                  ].map((test) => {
-                    const isLocked = test.isPro && !isPremium;
-                    return (
-                      <Link
-                        key={test.table}
-                        to={isLocked ? '/upgrade' : `/test/${test.table}`}
-                        className={`p-3 rounded-lg border transition-all text-sm ${
-                          isLocked 
-                            ? 'bg-muted/50 border-border hover:bg-muted' 
-                            : test.isFree 
-                              ? 'bg-success/10 border-success/20 hover:bg-success/20' 
-                              : 'bg-card border-border hover:border-primary/50 hover:bg-primary/5'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium truncate">{test.name}</span>
-                          {isLocked ? (
-                            <Lock className="w-3 h-3 text-muted-foreground flex-shrink-0" />
-                          ) : (
-                            <Play className="w-3 h-3 text-primary flex-shrink-0" />
-                          )}
-                        </div>
-                      </Link>
-                    );
-                  })}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                  {delhiPoliceTests.map((test) => (
+                    <TestCard key={test.table} test={test} />
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -333,29 +324,9 @@ export default function Dashboard() {
                       name: `English Mock ${i + 1}`,
                       table: `SSC GD English Mock ${i + 1}`,
                       isPro: true,
-                    })).map((test) => {
-                      const isLocked = !isPremium;
-                      return (
-                        <Link
-                          key={test.table}
-                          to={isLocked ? '/upgrade' : `/test/${test.table}`}
-                          className={`p-3 rounded-lg border transition-all text-sm ${
-                            isLocked 
-                              ? 'bg-muted/50 border-border hover:bg-muted' 
-                              : 'bg-card border-border hover:border-primary/50 hover:bg-primary/5'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-medium truncate">{test.name}</span>
-                            {isLocked ? (
-                              <Lock className="w-3 h-3 text-muted-foreground flex-shrink-0" />
-                            ) : (
-                              <Play className="w-3 h-3 text-primary flex-shrink-0" />
-                            )}
-                          </div>
-                        </Link>
-                      );
-                    })}
+                    })).map((test) => (
+                      <TestCard key={test.table} test={test} />
+                    ))}
                   </div>
                 </div>
                 {/* Hindi Mocks */}
@@ -366,29 +337,9 @@ export default function Dashboard() {
                       name: `Hindi Mock ${i + 1}`,
                       table: `SSC GD Hindi Mock ${i + 1}`,
                       isPro: true,
-                    })).map((test) => {
-                      const isLocked = !isPremium;
-                      return (
-                        <Link
-                          key={test.table}
-                          to={isLocked ? '/upgrade' : `/test/${test.table}`}
-                          className={`p-3 rounded-lg border transition-all text-sm ${
-                            isLocked 
-                              ? 'bg-muted/50 border-border hover:bg-muted' 
-                              : 'bg-card border-border hover:border-primary/50 hover:bg-primary/5'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-medium truncate">{test.name}</span>
-                            {isLocked ? (
-                              <Lock className="w-3 h-3 text-muted-foreground flex-shrink-0" />
-                            ) : (
-                              <Play className="w-3 h-3 text-primary flex-shrink-0" />
-                            )}
-                          </div>
-                        </Link>
-                      );
-                    })}
+                    })).map((test) => (
+                      <TestCard key={test.table} test={test} />
+                    ))}
                   </div>
                 </div>
               </CardContent>
@@ -409,7 +360,7 @@ export default function Dashboard() {
                 {subjects.map((subject) => (
                   <Link
                     key={subject.name}
-                    to={isPremium ? `/practice?subject=${subject.name.toLowerCase()}` : '/upgrade'}
+                    to={isPremium ? `/practice?subject=${subject.tablePrefix.toLowerCase()}` : '/upgrade'}
                     className="flex items-center justify-between p-3 md:p-4 rounded-lg hover:bg-muted transition-colors group"
                   >
                     <div className="flex items-center gap-3 md:gap-4">
@@ -457,7 +408,7 @@ export default function Dashboard() {
                         <div className="flex items-center justify-between mb-2">
                           <p className="font-medium text-xs md:text-sm line-clamp-1">{attempt.test_name}</p>
                           <span className={`text-xs md:text-sm font-semibold ${
-                            attempt.percentage >= 70 ? 'text-success' : 
+                            attempt.percentage >= 70 ? 'text-success' :
                             attempt.percentage >= 40 ? 'text-warning' : 'text-destructive'
                           }`}>
                             {attempt.percentage.toFixed(0)}%
@@ -476,6 +427,14 @@ export default function Dashboard() {
                     <BookOpen className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-3 opacity-50" />
                     <p className="text-sm">No tests attempted yet</p>
                     <p className="text-xs mt-1">Start a mock test to see your progress</p>
+                    <div className="mt-4">
+                      <Link to="/test/Delhi Police Mock 1">
+                        <Button className="w-full gradient-primary">
+                          <Play className="w-4 h-4 mr-2" />
+                          Start Free Mock Test
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 )}
               </CardContent>

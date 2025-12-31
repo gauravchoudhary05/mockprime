@@ -103,7 +103,7 @@ const getStorageUrl = (bucket: string, mockFolder: string, questionNum: number, 
   let path = "";
   
   if (imageType === "question") {
-    path = `${mockFolder}/Question ${questionNum}/Question Image/question.jpeg`;
+    path = `${mockFolder}/Question ${questionNum}/Question Image/Question.jpeg`;
   } else if (imageType === "option") {
     const optionFolder = `Option ${optionNum} Image`;
     path = `${mockFolder}/Question ${questionNum}/${optionFolder}/${optionNum}.jpeg`;
@@ -167,7 +167,7 @@ export default function Test() {
             option_2: item.option_2 || "",
             option_3: item.option_3 || "",
             option_4: item.option_4 || "",
-            marks: item.marks || 1,
+            marks: item.marks || 2,
             negative_marks: item.negative_marks || 0.25,
           };
 
@@ -231,7 +231,7 @@ export default function Test() {
         setAnswers(initialAnswers);
       }
     } catch (error) {
-      console.error("Error fetching questions:", error);
+      console.error("Error fetching questions:", JSON.stringify(error, null, 2));
       toast({
         title: "Error",
         description: "Failed to load questions. Please try again.",

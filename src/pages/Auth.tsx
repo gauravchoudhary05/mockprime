@@ -66,11 +66,11 @@ export default function Auth() {
               <span className="font-display font-bold text-2xl">MockPrime</span>
             </div>
             <h2 className="text-3xl font-bold mb-6">
-              Ace Your Delhi Police Exam
+              Ace Your Competitive Exam
             </h2>
             <p className="text-primary-foreground/80 mb-8 text-lg">
               Comprehensive mock tests and practice questions designed
-              specifically for Delhi Police recruitment exams.
+              specifically for Competitive exams.
             </p>
             <div className="space-y-4">
               <div className="flex items-center gap-4">

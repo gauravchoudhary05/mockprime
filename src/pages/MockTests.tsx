@@ -24,23 +24,23 @@ export default function MockTests() {
     return <Navigate to="/auth?mode=login" replace />;
   }
 
-  // Free test always first
+  // Free test always first - GENERIC
   const freeTest = {
     id: 'free',
-    name: 'Delhi Police 2026 – Full Mock Test 1',
-    table: 'Delhi Police Mock 1',
+    name: 'Competitive Exam – Full Mock Test 1',
+    table: 'Competitive Mock 1',
     questions: 100,
     duration: 90,
     difficulty: 'Medium',
     isFree: true,
   };
 
-  // Pro mock tests
+  // Pro mock tests - GENERIC
   const mockTests = [
-    { id: 2, name: 'Mock Test 2', table: 'Delhi Police Mock 2', questions: 100, duration: 90, difficulty: 'Medium' },
-    { id: 3, name: 'Mock Test 3', table: 'Delhi Police Mock 3', questions: 100, duration: 90, difficulty: 'Hard' },
-    { id: 4, name: 'Mock Test 4', table: 'Delhi Police Mock 4', questions: 100, duration: 90, difficulty: 'Hard' },
-    { id: 5, name: 'Mock Test 5', table: 'Delhi Police Mock 5', questions: 100, duration: 90, difficulty: 'Expert' },
+    { id: 2, name: 'Competitive Mock Test 2', table: 'Competitive Mock 2', questions: 100, duration: 90, difficulty: 'Medium' },
+    { id: 3, name: 'Competitive Mock Test 3', table: 'Competitive Mock 3', questions: 100, duration: 90, difficulty: 'Hard' },
+    { id: 4, name: 'Competitive Mock Test 4', table: 'Competitive Mock 4', questions: 100, duration: 90, difficulty: 'Hard' },
+    { id: 5, name: 'Competitive Mock Test 5', table: 'Competitive Mock 5', questions: 100, duration: 90, difficulty: 'Expert' },
   ];
 
   // SSC GD Tests - 10 Hindi + 10 English
@@ -75,7 +75,7 @@ export default function MockTests() {
     { id: 'r1', name: 'Reasoning Set 1', table: 'Reasoning 1', questions: 25, duration: 30, difficulty: 'Medium' },
     { id: 'r2', name: 'Reasoning Set 2', table: 'Reasoning 2', questions: 25, duration: 30, difficulty: 'Medium' },
     { id: 'r3', name: 'Reasoning Set 3', table: 'Reasoning 3', questions: 25, duration: 30, difficulty: 'Hard' },
-    { id: 'r4', name: 'Reasoning Set 4', table: 'Reasoning  4', questions: 25, duration: 30, difficulty: 'Hard' },
+    { id: 'r4', name: 'Reasoning Set 4', table: 'Reasoning 4', questions: 25, duration: 30, difficulty: 'Hard' },
     { id: 'r5', name: 'Reasoning Set 5', table: 'Reasoning 5', questions: 25, duration: 30, difficulty: 'Expert' },
   ];
 
@@ -103,9 +103,7 @@ export default function MockTests() {
     { id: 'ga5', name: 'General Awareness Set 5', table: 'General Awareness 5', questions: 25, duration: 30, difficulty: 'Expert' },
   ];
 
-  const previousYearPapers = [
-    { id: 'dp2023', name: 'Delhi Police 2023', table: 'Dehli Police 2023', questions: 100, duration: 90, badge: 'Official' },
-  ];
+  // REMOVED Delhi Police specific previous year papers
 
   return (
     <div className="min-h-screen bg-background">
@@ -116,7 +114,7 @@ export default function MockTests() {
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold mb-1">Mock Tests</h1>
               <p className="text-muted-foreground text-sm md:text-base">
-                Full-length mock tests simulating the actual Delhi Police exam
+                Full-length mock tests for competitive exams (SSC GD, CSIR & more)
               </p>
             </div>
             {!isPremium && (
@@ -225,23 +223,6 @@ export default function MockTests() {
               <TestCard
                 key={test.id}
                 {...test}
-                isPremium={isPremium}
-                isLocked={!isPremium}
-                index={index}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Previous Year Papers */}
-        <div className="mb-12">
-          <h2 className="text-xl md:text-2xl font-display font-bold mb-4">Previous Year Papers</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {previousYearPapers.map((test, index) => (
-              <TestCard
-                key={test.id}
-                {...test}
-                duration={90}
                 isPremium={isPremium}
                 isLocked={!isPremium}
                 index={index}

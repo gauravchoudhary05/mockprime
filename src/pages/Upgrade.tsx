@@ -7,6 +7,7 @@ import { Navbar } from '../components/layout/Navbar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import { Input } from '../components/ui/input';
 import { useToast } from '../hooks/use-toast';
 import { 
   Crown, 
@@ -31,6 +32,11 @@ export default function Upgrade() {
   const { toast } = useToast();
   const [creating, setCreating] = useState(false);
   const [orderData, setOrderData] = useState<any>(null);
+  
+  // ✅ REFERRAL STATES
+  const [referralCode, setReferralCode] = useState('');
+  const [discountApplied, setDiscountApplied] = useState(false);
+  const [loadingReferral, setLoadingReferral] = useState(false);
 
   // Load Razorpay script
   useEffect(() => {
@@ -55,10 +61,53 @@ export default function Upgrade() {
     return <Navigate to="/auth?mode=login" replace />;
   }
 
+  // ✅ REFERRAL VALIDATION
+  const validateReferral = async () => {
+  if (!referralCode || discountApplied || loadingReferral) return;
+  
+  setLoadingReferral(true);
+  try {
+    // ✅ NEW: Query referral_codes table (not profiles)
+    const { data } = await supabase
+      .from('referral_codes')
+      .select('id, discount_amount, is_active')
+      .eq('code', referralCode.trim().toUpperCase())
+      .eq('is_active', true)
+      .single();
+      
+    if (data) {
+      setDiscountApplied(true);
+      toast({
+        title: `✅ ₹${data.discount_amount} Discount Applied!`,
+        description: "Pay only ₹99 instead of ₹199",
+      });
+    } else {
+      toast({
+        title: "❌ Invalid Referral Code",
+        description: "Code not found or inactive",
+        variant: "destructive",
+      });
+    }
+  } catch (error) {
+    toast({
+      title: "Error",
+      description: "Failed to validate referral code",
+      variant: "destructive",
+    });
+  } finally {
+    setLoadingReferral(false);
+  }
+};
+
+
   const handleUpgrade = async () => {
     setCreating(true);
     try {
+      // ✅ PASS REFERRAL CODE TO ORDER
       const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
+        body: { 
+          referral_code: discountApplied ? referralCode.trim().toUpperCase() : null 
+        },
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
         },
@@ -73,7 +122,7 @@ export default function Upgrade() {
         amount: data.amountToPay,
         currency: 'INR',
         name: 'MockPrime Premium',
-        description: 'Unlock all mock tests – ₹199/month',
+        description: discountApplied ? '₹99 with referral (₹100 OFF!)' : 'Unlock all mock tests – ₹199/month',
         order_id: data.orderId,
         prefill: {
           name: data.userName || '',
@@ -84,6 +133,27 @@ export default function Upgrade() {
         },
         handler: async function (response: any) {
           try {
+            // 1. INSERT PAYMENT RECORD FIRST
+            const { error: insertError } = await supabase.from('payments').insert({
+              user_id: user.id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+              amount: Math.floor(data.amountToPay / 100),
+              status: 'completed',
+              new_plan: 'Premium',
+              old_plan: profile?.plan_name || 'Free',
+              currency: 'INR',
+              pro_rata: !!orderData?.proRata
+            });
+
+            if (insertError) {
+              console.error('Payment insert failed:', insertError);
+              throw new Error('Failed to record payment');
+            }
+            console.log('✅ Payment recorded in payments table!');
+
+            // 2. Verify with Edge Function
             const verifyResult = await supabase.functions.invoke('verify-razorpay-payment', {
               body: {
                 razorpay_order_id: response.razorpay_order_id,
@@ -99,13 +169,15 @@ export default function Upgrade() {
 
             toast({
               title: "Payment Successful!",
-              description: "Welcome to MockPrime Premium! All tests are now unlocked.",
+              description: discountApplied 
+                ? "Welcome to MockPrime Premium! ₹100 referral discount applied." 
+                : "Welcome to MockPrime Premium! All tests are now unlocked.",
             });
 
             refreshProfile();
             navigate('/mock-tests');
           } catch (err: any) {
-            console.error('Verification error:', err);
+            console.error('Payment verification error:', err);
             toast({
               title: "Verification Failed",
               description: "Please contact support if amount was deducted.",
@@ -138,8 +210,8 @@ export default function Upgrade() {
   };
 
   const features = [
-    'All 5 Full Mock Tests',
-    'Previous Year Papers',
+    'All 40+ Full Mock Tests',
+    'Delhi Police + SSC GD Papers',
     'Subject-wise Practice Sets',
     'Detailed Performance Analytics',
     'Unlimited Test Attempts',
@@ -201,18 +273,57 @@ export default function Upgrade() {
 
           <Card className="shadow-card border-0 mb-6 overflow-hidden">
             <div className="gradient-primary p-6 text-primary-foreground">
-              <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold">₹199</span>
+              <div className="flex items-baseline gap-2 justify-center">
+                <span className={`text-4xl font-bold ${discountApplied ? 'text-success' : ''}`}>
+                  {discountApplied ? '₹99' : '₹199'}
+                </span>
                 <span className="text-primary-foreground/80">/month</span>
               </div>
-              {orderData?.proRata && (
-                <p className="text-sm mt-2 text-primary-foreground/90">
+              {discountApplied && (
+                <p className="text-sm mt-2 text-success text-center font-medium">
+                  💰 ₹100 OFF! (Original ₹199)
+                </p>
+              )}
+              {orderData?.proRata && !discountApplied && (
+                <p className="text-sm mt-2 text-primary-foreground/90 text-center">
                   Pay only ₹{orderData.amountDisplay} today (pro-rated)
                 </p>
               )}
             </div>
+            
             <CardContent className="p-6">
-              <div className="space-y-4">
+              {/* ✅ REFERRAL INPUT */}
+              {!discountApplied && (
+                <div className="mb-6 p-4 border rounded-lg bg-muted/50">
+                  <div className="flex flex-col sm:flex-row gap-2 items-end">
+                    <Input
+                      value={referralCode}
+                      onChange={(e) => setReferralCode(e.target.value)}
+                      placeholder="Enter referral code (₹100 OFF)"
+                      className="flex-1"
+                      disabled={loadingReferral}
+                    />
+                    <Button 
+                      type="button" 
+                      size="sm" 
+                      onClick={validateReferral}
+                      disabled={loadingReferral || !referralCode}
+                      className="w-full sm:w-auto"
+                    >
+                      {loadingReferral ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        'Apply ₹100 OFF'
+                      )}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1 text-center">
+                    Get ₹100 discount using friend's referral code
+                  </p>
+                </div>
+              )}
+
+              <div className="space-y-4 mb-8">
                 {features.map((feature, index) => (
                   <div key={index} className="flex items-center gap-3">
                     <div className="w-5 h-5 rounded-full bg-success/10 flex items-center justify-center flex-shrink-0">
@@ -231,7 +342,9 @@ export default function Upgrade() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">New Plan</span>
-                    <span className="font-medium text-primary">Premium – ₹199/month</span>
+                    <span className="font-medium text-primary">
+                      {discountApplied ? 'Premium (₹99 referral)' : 'Premium'} – ₹{discountApplied ? '99' : '199'}/month
+                    </span>
                   </div>
                 </div>
 
@@ -248,7 +361,7 @@ export default function Upgrade() {
                   ) : (
                     <>
                       <Crown className="w-5 h-5 mr-2" />
-                      Upgrade to Premium
+                      {discountApplied ? 'Upgrade to Premium (₹99)' : 'Upgrade to Premium'}
                     </>
                   )}
                 </Button>

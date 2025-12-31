@@ -33,7 +33,7 @@ export default function Index() {
             className="h-16 w-auto object-contain"
           />
           <p className="text-sm text-muted-foreground">
-            Delhi Police Exam Preparation
+            Competitive Exam Preparation
           </p>
         </div>
       </header>
