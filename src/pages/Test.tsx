@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { useProfile } from "../hooks/useProfile";
 import { supabase } from "../integrations/supabase/client";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
@@ -98,7 +99,6 @@ const getSSCGDImageConfig = (
   return null;
 };
 
-// Fixed URL generator matching the exact storage structure
 const getStorageUrl = (bucket: string, mockFolder: string, questionNum: number, imageType: string, optionNum?: number): string => {
   let path = "";
   
@@ -129,6 +129,7 @@ interface UserAnswer {
 export default function Test() {
   const { testName } = useParams<{ testName: string }>();
   const { user, loading: authLoading } = useAuth();
+  const { profile, isPremium, loading: profileLoading } = useProfile();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -171,7 +172,6 @@ export default function Test() {
             negative_marks: item.negative_marks || 0.25,
           };
 
-          // Add images based on exact storage structure
           const imageType = questionImageConfig[questionId];
           if (bucketConfig && imageType) {
             if (imageType === "both" || imageType === "question") {
@@ -357,7 +357,7 @@ export default function Test() {
     }
   };
 
-  if (authLoading) {
+  if (authLoading || profileLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
@@ -366,6 +366,8 @@ export default function Test() {
   }
 
   if (!user) return <Navigate to="/auth?mode=login" replace />;
+
+  if (!isPremium) return <Navigate to="/upgrade" replace />;
 
   if (loading) {
     return (
