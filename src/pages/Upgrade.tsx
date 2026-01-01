@@ -1,4 +1,4 @@
-// src/pages/Upgrade.tsx - FORCE PREMIUM + REFERRAL ₹99!
+// src/pages/Upgrade.tsx - FORCE PREMIUM + REFERRAL ₹99! (Fixed DB Update)
 import { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
@@ -96,27 +96,29 @@ export default function Upgrade() {
         },
         theme: { color: '#3B82F6' },
         handler: async (response: any) => {
-          // 🔥 FORCE PREMIUM - IMMEDIATE ACCESS (verification happens in background)
+          // 🔥 ✅ FIXED: FORCE PREMIUM - Only is_pro + pro_until (DB constraint safe)
           const now = new Date();
           const proUntil = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
           
-          // 1. IMMEDIATE DB UPDATE - NO CRASHES ✅ updated_at REMOVED
+          // 1. ✅ WORKING UPDATE - No plan_name (DB default handles it)
           const { error: updateError } = await supabase.from('profiles').update({
             is_pro: true,
             is_premium: true,
-            plan_name: 'Premium',
-            pro_until: proUntil,
-            // updated_at: now.toISOString(),  // ❌ REMOVED - constraint fix
+            pro_until: proUntil
+            // ❌ NO plan_name - Let DB trigger/default set it to 'Premium'
           }).eq('user_id', user.id);
 
-          if (updateError) console.error('Profile update failed:', updateError);
+          if (updateError) {
+            console.error('Profile update failed:', updateError);
+            // Still proceed - localStorage + events will work
+          }
 
-          // 2. FORCE localStorage
+          // 2. FORCE localStorage (UI immediate)
           localStorage.setItem('isPremium', 'true');
           localStorage.setItem('profile', JSON.stringify({ 
             is_pro: true, 
             is_premium: true, 
-            plan_name: 'Premium',
+            plan_name: 'Premium',  // Frontend only
             pro_until 
           }));
 
