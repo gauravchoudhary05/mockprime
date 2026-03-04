@@ -31,7 +31,8 @@ export default function Practice() {
       id: 'reasoning',
       name: 'Reasoning',
       icon: Brain,
-      color: 'bg-purple-500',
+      color: 'from-purple-500 to-violet-600',
+      bgColor: 'bg-purple-500',
       description: 'Logical reasoning, puzzles, and analytical thinking',
       sets: [
         { id: 1, name: 'Reasoning Set 1', table: 'Reasoning 1', questions: 25 },
@@ -47,7 +48,8 @@ export default function Practice() {
       id: 'mathematics',
       name: 'Mathematics',
       icon: Calculator,
-      color: 'bg-blue-500',
+      color: 'from-blue-500 to-cyan-500',
+      bgColor: 'bg-blue-500',
       description: 'Numerical ability, arithmetic, and quantitative aptitude',
       sets: [
         { id: 1, name: 'Maths Set 1', table: 'Maths 1', questions: 25 },
@@ -62,7 +64,8 @@ export default function Practice() {
       id: 'general awareness',
       name: 'General Awareness',
       icon: Globe,
-      color: 'bg-green-500',
+      color: 'from-emerald-500 to-green-600',
+      bgColor: 'bg-green-500',
       description: 'Current affairs, history, geography, and general knowledge',
       sets: [
         { id: 1, name: 'GA Set 1', table: 'General Awareness 1', questions: 25 },
@@ -76,7 +79,8 @@ export default function Practice() {
       id: 'computer',
       name: 'Computer',
       icon: Monitor,
-      color: 'bg-orange-500',
+      color: 'from-orange-500 to-amber-500',
+      bgColor: 'bg-orange-500',
       description: 'Basic computer knowledge and information technology',
       sets: [
         { id: 1, name: 'Computer Set 1', table: 'Computer 1', questions: 25 },
@@ -88,7 +92,7 @@ export default function Practice() {
     },
   ];
 
-  const currentSubject = selectedSubject 
+  const currentSubject = selectedSubject
     ? subjects.find(s => s.id === selectedSubject.toLowerCase())
     : null;
 
@@ -102,17 +106,17 @@ export default function Practice() {
 
   if (currentSubject) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background animated-gradient-bg">
         <Navbar />
         <main className="container mx-auto px-4 pt-20 pb-12">
           <div className="mb-6 animate-fade-in">
-            <Link to="/practice" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4 transition-colors">
+            <Link to="/practice" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4 transition-colors font-medium text-sm">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Subjects
             </Link>
             <div className="flex items-center gap-3 md:gap-4">
-              <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl ${currentSubject.color} flex items-center justify-center flex-shrink-0`}>
-                <currentSubject.icon className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
+              <div className={`w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br ${currentSubject.color} flex items-center justify-center flex-shrink-0 shadow-lg`}>
+                <currentSubject.icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-display font-bold">{currentSubject.name}</h1>
@@ -122,13 +126,13 @@ export default function Practice() {
           </div>
 
           {!isPremium && (
-            <div className="mb-6 p-4 rounded-lg bg-primary/5 border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="mb-6 p-4 rounded-xl bg-primary/5 border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <Crown className="w-5 h-5 text-primary" />
-                <span className="text-sm">Practice sets require Premium access</span>
+                <span className="text-sm font-medium">Practice sets require Premium access</span>
               </div>
               <Link to="/upgrade">
-                <Button size="sm" className="gradient-primary w-full sm:w-auto">
+                <Button size="sm" className="gradient-primary w-full sm:w-auto shadow-glow">
                   Upgrade Now
                 </Button>
               </Link>
@@ -137,19 +141,24 @@ export default function Practice() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {currentSubject.sets.map((set, index) => (
-              <Card 
+              <Card
                 key={set.id}
-                className={`shadow-card border-0 hover:shadow-glow transition-all duration-300 animate-fade-in ${!isPremium ? 'opacity-90' : ''}`}
+                className={`shadow-card border-0 hover:shadow-card-hover transition-all duration-300 animate-fade-in card-hover-lift overflow-hidden ${!isPremium ? 'opacity-90' : ''}`}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="font-display text-lg">{set.name}</CardTitle>
-                      <CardDescription>{set.questions} Questions</CardDescription>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${currentSubject.color} flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
+                        {set.id}
+                      </div>
+                      <div>
+                        <CardTitle className="font-display text-lg">{set.name}</CardTitle>
+                        <CardDescription>{set.questions} Questions</CardDescription>
+                      </div>
                     </div>
                     {!isPremium && (
-                      <Badge className="gradient-primary text-primary-foreground border-0">
+                      <Badge className="gradient-primary text-primary-foreground border-0 shimmer">
                         <Crown className="w-3 h-3 mr-1" />
                         PRO
                       </Badge>
@@ -157,9 +166,9 @@ export default function Practice() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <Button 
+                  <Button
                     onClick={() => handleSetClick(set.table)}
-                    className={`w-full ${isPremium ? 'gradient-primary' : ''}`}
+                    className={`w-full ${isPremium ? 'gradient-primary shadow-glow hover:shadow-glow-lg' : ''} transition-all`}
                     variant={isPremium ? 'default' : 'outline'}
                   >
                     {isPremium ? (
@@ -184,10 +193,11 @@ export default function Practice() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background animated-gradient-bg">
       <Navbar />
       <main className="container mx-auto px-4 pt-20 pb-12">
-        <div className="mb-6 animate-fade-in">
+        <div className="mb-8 animate-fade-in relative">
+          <div className="absolute -top-10 -right-20 w-60 h-60 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold mb-1">Practice Questions</h1>
@@ -195,7 +205,7 @@ export default function Practice() {
             </div>
             {!isPremium && (
               <Link to="/upgrade">
-                <Button className="gradient-primary w-full sm:w-auto">
+                <Button className="gradient-primary w-full sm:w-auto shadow-glow hover:shadow-glow-lg transition-all hover:-translate-y-0.5">
                   <Crown className="w-4 h-4 mr-2" />
                   Upgrade to Premium
                 </Button>
@@ -206,19 +216,23 @@ export default function Practice() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
           {subjects.map((subject, index) => (
-            <Link 
-              key={subject.id} 
+            <Link
+              key={subject.id}
               to={`/practice?subject=${subject.id}`}
               className="block"
             >
-              <Card 
-                className="shadow-card border-0 hover:shadow-glow transition-all duration-300 h-full animate-fade-in group"
+              <Card
+                className="shadow-card border-0 hover:shadow-card-hover transition-all duration-300 h-full animate-fade-in group card-hover-lift overflow-hidden"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-start gap-3 md:gap-4">
-                    <div className={`w-12 h-12 md:w-14 md:h-14 rounded-xl ${subject.color} flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0`}>
-                      <subject.icon className="w-6 h-6 md:w-7 md:h-7 text-primary-foreground" />
+                    <div className="relative">
+                      <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br ${subject.color} flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0 shadow-lg`}>
+                        <subject.icon className="w-7 h-7 md:w-8 md:h-8 text-white" />
+                      </div>
+                      {/* Glow behind icon */}
+                      <div className={`absolute -inset-2 rounded-2xl bg-gradient-to-br ${subject.color} opacity-0 group-hover:opacity-20 transition-opacity blur-xl -z-10`} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <CardTitle className="font-display text-lg md:text-xl">{subject.name}</CardTitle>
@@ -228,8 +242,8 @@ export default function Practice() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <Badge variant="secondary">{subject.sets.length} Practice Sets</Badge>
-                    <Button variant="ghost" size="sm" className="group-hover:translate-x-1 transition-transform">
+                    <Badge variant="secondary" className="font-semibold">{subject.sets.length} Practice Sets</Badge>
+                    <Button variant="ghost" size="sm" className="group-hover:translate-x-1 group-hover:text-primary transition-all">
                       Start <Play className="w-4 h-4 ml-1" />
                     </Button>
                   </div>
