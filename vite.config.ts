@@ -10,10 +10,18 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('production')
+  },
   build: {
     outDir: 'dist',
+    sourcemap: false,
+    minify: 'terser'
   },
   server: {
-    port: 8080,
+    port: 8080
+  },
+  preview: {
+    port: 8080
   }
 })

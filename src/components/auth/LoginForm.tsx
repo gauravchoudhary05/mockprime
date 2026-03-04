@@ -17,19 +17,19 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [termsError, setTermsError] = useState(false);
-
+  
   const { signIn } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!termsAccepted) {
       setTermsError(true);
       return;
     }
-
+    
     setTermsError(false);
     setLoading(true);
 
@@ -66,10 +66,10 @@ export function LoginForm() {
           Sign in to continue your exam preparation
         </CardDescription>
       </CardHeader>
-
+      
       <CardContent className="p-8 pb-12 space-y-7">
         <form onSubmit={handleSubmit} className="space-y-7">
-
+          
           {/* 🔥 Email - EXACT SAME AS SIGNUP */}
           <div className="space-y-3">
             <Label htmlFor="email" className="font-semibold text-lg text-slate-900 flex items-center gap-2">
@@ -145,7 +145,7 @@ export function LoginForm() {
                 </Link>
               </label>
             </div>
-
+            
             {termsError && (
               <div className="mt-4 p-4 bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200/80 rounded-xl shadow-md backdrop-blur-sm">
                 <div className="flex items-center gap-3">
@@ -159,8 +159,8 @@ export function LoginForm() {
           </div>
 
           {/* 🔥 CTA Button - EXACT SAME AS SIGNUP */}
-          <Button
-            type="submit"
+          <Button 
+            type="submit" 
             disabled={loading || !termsAccepted}
             className="w-full h-16 text-xl font-bold shadow-2xl hover:shadow-3xl bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 hover:from-indigo-700 hover:via-blue-700 hover:to-purple-800 transform hover:-translate-y-1 transition-all duration-300 rounded-3xl border-0 text-white relative overflow-hidden group"
           >
@@ -186,8 +186,8 @@ export function LoginForm() {
           <p className="text-slate-600 text-base font-semibold">
             <Users className="w-5 h-5 inline text-blue-600 mr-2" />
             New to MockPrime?{' '}
-            <Link
-              to="/auth?mode=signup"
+            <Link 
+              to="/auth?mode=signup" 
               className="font-bold text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1 group"
             >
               Create Account

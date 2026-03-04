@@ -4,7 +4,7 @@ import { useProfile } from '../hooks/useProfile';
 import { Navbar } from '../components/layout/Navbar';
 import { TestCard } from '../components/TestCard';
 import { Badge } from '../components/ui/badge';
-import { Crown, Loader2, Sparkles, Target, Trophy } from 'lucide-react';
+import { Crown, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -36,12 +36,12 @@ export default function MockTests() {
   };
 
   // Pro mock tests ✅ ALL FIXED - Exact Supabase table names
-  const mockTests = [
-    { id: 2, name: 'Delhi Police Mock Test 2', table: 'Delhi Police Mock 2', questions: 100, duration: 90, difficulty: 'Medium' },
-    { id: 3, name: 'Delhi Police Mock Test 3', table: 'Delhi Police Mock 3', questions: 100, duration: 90, difficulty: 'Hard' },
-    { id: 4, name: 'Delhi Police Mock Test 4', table: 'Delhi Police Mock 4', questions: 100, duration: 90, difficulty: 'Hard' },
-    { id: 5, name: 'Delhi Police Mock Test 5', table: 'Delhi Police Mock 5', questions: 100, duration: 90, difficulty: 'Expert' },
-  ];
+ const mockTests = [
+  { id: 2, name: 'Delhi Police Mock Test 2', table: 'Delhi Police Mock 2', questions: 100, duration: 90, difficulty: 'Medium' },
+  { id: 3, name: 'Delhi Police Mock Test 3', table: 'Delhi Police Mock 3', questions: 100, duration: 90, difficulty: 'Hard' },
+  { id: 4, name: 'Delhi Police Mock Test 4', table: 'Delhi Police Mock 4', questions: 100, duration: 90, difficulty: 'Hard' },
+  { id: 5, name: 'Delhi Police Mock Test 5', table: 'Delhi Police Mock 5', questions: 100, duration: 90, difficulty: 'Expert' },
+];
 
   // SSC GD Tests - 10 Hindi + 10 English ✅ Already correct
   const sscGDHindiTests = [
@@ -104,32 +104,14 @@ export default function MockTests() {
   ];
 
   const previousYearPapers = [
-    { id: 'dp2023', name: 'Delhi Police 2023', table: 'Delhi Police 2023', questions: 100, duration: 90, badge: 'Official' },
+    { id: 'dp2023', name: 'Delhi Police 2023', table: 'Delhi Police 2023', questions: 100, duration: 90, badge: 'Official' }, // ✅ Fixed typo: Dehli → Delhi
   ];
 
-  const SectionHeader = ({ icon: Icon, iconBg, title, count, children }: { icon: any; iconBg: string; title: string; count?: number; children?: React.ReactNode }) => (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
-      <div className="flex items-center gap-3">
-        <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${iconBg} flex items-center justify-center shadow-md`}>
-          <Icon className="w-4.5 h-4.5 text-white" />
-        </div>
-        <div>
-          <h2 className="text-xl md:text-2xl font-display font-bold">{title}</h2>
-        </div>
-        {count && (
-          <Badge variant="secondary" className="text-xs font-semibold">{count} Tests</Badge>
-        )}
-      </div>
-      {children}
-    </div>
-  );
-
   return (
-    <div className="min-h-screen bg-background animated-gradient-bg">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <main className="container mx-auto px-4 pt-20 pb-12">
-        <div className="mb-8 animate-fade-in relative">
-          <div className="absolute -top-10 -right-20 w-60 h-60 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="mb-6 animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold mb-1">Mock Tests</h1>
@@ -139,7 +121,7 @@ export default function MockTests() {
             </div>
             {!isPremium && (
               <Link to="/upgrade">
-                <Button className="gradient-primary w-full sm:w-auto shadow-glow hover:shadow-glow-lg transition-all hover:-translate-y-0.5">
+                <Button className="gradient-primary w-full sm:w-auto">
                   <Crown className="w-4 h-4 mr-2" />
                   Upgrade to Premium
                 </Button>
@@ -149,12 +131,9 @@ export default function MockTests() {
         </div>
 
         {/* Free Test - Always First */}
-        <div className="mb-10">
+        <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <Badge className="bg-emerald-50 text-emerald-600 border-emerald-200 px-3 py-1 text-sm font-semibold">
-              <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-              Free Access
-            </Badge>
+            <Badge className="bg-success/10 text-success border-success/20">Free Access</Badge>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             <TestCard
@@ -167,10 +146,10 @@ export default function MockTests() {
         </div>
 
         {/* Full Mock Tests */}
-        <div className="mb-10">
-          <div className="flex items-center gap-3 mb-4">
-            <Badge className="gradient-primary text-primary-foreground border-0 px-3 py-1 text-sm font-semibold shimmer">
-              <Crown className="w-3.5 h-3.5 mr-1.5" />
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Badge className="gradient-primary text-primary-foreground border-0">
+              <Crown className="w-3 h-3 mr-1" />
               Full Mock Tests
             </Badge>
             {!isPremium && (
@@ -190,67 +169,95 @@ export default function MockTests() {
           </div>
         </div>
 
-        {/* Subject-wise sections */}
-        <div className="mb-10">
-          <SectionHeader icon={Target} iconBg="from-purple-500 to-violet-600" title="Reasoning Tests" count={reasoningTests.length} />
+        {/* Reasoning Tests */}
+        <div className="mb-8">
+          <h2 className="text-xl md:text-2xl font-display font-bold mb-4">Reasoning Tests</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {reasoningTests.map((test, index) => (
-              <TestCard key={test.id} {...test} isPremium={isPremium} isLocked={!isPremium} index={index} />
+              <TestCard
+                key={test.id}
+                {...test}
+                isPremium={isPremium}
+                isLocked={!isPremium}
+                index={index}
+              />
             ))}
           </div>
         </div>
 
-        <div className="mb-10">
-          <SectionHeader icon={Target} iconBg="from-blue-500 to-cyan-500" title="Mathematics Tests" count={mathsTests.length} />
+        {/* Maths Tests */}
+        <div className="mb-8">
+          <h2 className="text-xl md:text-2xl font-display font-bold mb-4">Mathematics Tests</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {mathsTests.map((test, index) => (
-              <TestCard key={test.id} {...test} isPremium={isPremium} isLocked={!isPremium} index={index} />
+              <TestCard
+                key={test.id}
+                {...test}
+                isPremium={isPremium}
+                isLocked={!isPremium}
+                index={index}
+              />
             ))}
           </div>
         </div>
 
-        <div className="mb-10">
-          <SectionHeader icon={Target} iconBg="from-orange-500 to-amber-500" title="Computer Tests" count={computerTests.length} />
+        {/* Computer Tests */}
+        <div className="mb-8">
+          <h2 className="text-xl md:text-2xl font-display font-bold mb-4">Computer Tests</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {computerTests.map((test, index) => (
-              <TestCard key={test.id} {...test} isPremium={isPremium} isLocked={!isPremium} index={index} />
+              <TestCard
+                key={test.id}
+                {...test}
+                isPremium={isPremium}
+                isLocked={!isPremium}
+                index={index}
+              />
             ))}
           </div>
         </div>
 
-        <div className="mb-10">
-          <SectionHeader icon={Target} iconBg="from-emerald-500 to-green-600" title="General Awareness Tests" count={gaTests.length} />
+        {/* General Awareness Tests */}
+        <div className="mb-8">
+          <h2 className="text-xl md:text-2xl font-display font-bold mb-4">General Awareness Tests</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {gaTests.map((test, index) => (
-              <TestCard key={test.id} {...test} isPremium={isPremium} isLocked={!isPremium} index={index} />
+              <TestCard
+                key={test.id}
+                {...test}
+                isPremium={isPremium}
+                isLocked={!isPremium}
+                index={index}
+              />
             ))}
           </div>
         </div>
 
         {/* Previous Year Papers */}
         <div className="mb-12">
-          <SectionHeader icon={Target} iconBg="from-rose-500 to-pink-600" title="Previous Year Papers" count={previousYearPapers.length} />
+          <h2 className="text-xl md:text-2xl font-display font-bold mb-4">Previous Year Papers</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {previousYearPapers.map((test, index) => (
-              <TestCard key={test.id} {...test} duration={90} isPremium={isPremium} isLocked={!isPremium} index={index} />
+              <TestCard
+                key={test.id}
+                {...test}
+                duration={90}
+                isPremium={isPremium}
+                isLocked={!isPremium}
+                index={index}
+              />
             ))}
           </div>
         </div>
 
-        {/* SSC GD Section */}
-        <div className="relative pt-8 mt-8">
-          {/* Gradient divider */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 rounded-full" />
-
-          <div className="mb-8 animate-fade-in">
+        {/* SSC GD Section - New Dedicated Section */}
+        <div className="border-t-4 border-orange-500/30 pt-8 mt-8">
+          <div className="mb-6 animate-fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-md">
-                    <Trophy className="w-5 h-5 text-white" />
-                  </div>
                   <h1 className="text-2xl md:text-3xl font-display font-bold">SSC GD Constable 2025</h1>
-                  <Badge className="bg-orange-500/10 text-orange-600 border-orange-200 text-xs font-semibold">New</Badge>
+                  <Badge className="bg-orange-500 text-white border-0">New</Badge>
                 </div>
                 <p className="text-muted-foreground text-sm md:text-base">
                   Full-length mock tests for SSC GD Constable exam - Available in Hindi & English
@@ -258,7 +265,7 @@ export default function MockTests() {
               </div>
               {!isPremium && (
                 <Link to="/upgrade">
-                  <Button className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white w-full sm:w-auto shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5">
+                  <Button className="bg-orange-500 hover:bg-orange-600 text-white w-full sm:w-auto">
                     <Crown className="w-4 h-4 mr-2" />
                     Unlock All SSC GD Tests
                   </Button>
@@ -267,12 +274,27 @@ export default function MockTests() {
             </div>
           </div>
 
+          {/* All SSC GD Tests Combined */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+            {/* Hindi Tests */}
             {sscGDHindiTests.map((test, index) => (
-              <TestCard key={test.id} {...test} isPremium={isPremium} isLocked={!isPremium} index={index} />
+              <TestCard
+                key={test.id}
+                {...test}
+                isPremium={isPremium}
+                isLocked={!isPremium}
+                index={index}
+              />
             ))}
+            {/* English Tests */}
             {sscGDEnglishTests.map((test, index) => (
-              <TestCard key={test.id} {...test} isPremium={isPremium} isLocked={!isPremium} index={index + sscGDHindiTests.length} />
+              <TestCard
+                key={test.id}
+                {...test}
+                isPremium={isPremium}
+                isLocked={!isPremium}
+                index={index + sscGDHindiTests.length}
+              />
             ))}
           </div>
         </div>
